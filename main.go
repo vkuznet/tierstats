@@ -1,5 +1,5 @@
-// tierstats tool aggregates statistics from CMS popularity DB, DBS, SiteDB
-// and presents results for any given tier site and time interval
+// tierstats tool aggregates statistics for CMS data-tiers
+// Copyright (c) 2017 - Valentin Kuznetsov <vkuznet@gmail.com>
 package main
 
 import (

@@ -1,3 +1,5 @@
+// various utils
+// Copyright (c) 2017 - Valentin Kuznetsov <vkuznet@gmail.com>
 package utils
 
 import (

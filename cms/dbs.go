@@ -1,3 +1,5 @@
+// CMS module provides APIs to communicate with DBS system
+// Copyright (c) 2017 - Valentin Kuznetsov <vkuznet@gmail.com>
 package cms
 
 import (

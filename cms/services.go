@@ -1,3 +1,5 @@
+// CMS module provides common urls of CMS data-services
+// Copyright (c) 2017 - Valentin Kuznetsov <vkuznet@gmail.com>
 package cms
 
 func dbsUrl() string {
