@@ -1,4 +1,4 @@
-// Package utils
+// Package utils provides set of common utilities
 // Copyright (c) 2017 - Valentin Kuznetsov <vkuznet@gmail.com>
 package utils
 
