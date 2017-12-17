@@ -1,6 +1,7 @@
 # tierstats
 
 [![Build Status](https://travis-ci.org/vkuznet/tierstats.svg?branch=master)](https://travis-ci.org/vkuznet/tierstats)
+[![Go Report Card](https://goreportcard.com/badge/github.com/vkuznet/tierstats)](https://goreportcard.com/report/github.com/vkuznet/tierstats)
 [![GoDoc](https://godoc.org/github.com/vkuznet/tierstats?status.svg)](https://godoc.org/github.com/vkuznet/tierstats)
 
 ### tierstats tool
