@@ -1,4 +1,4 @@
-// CMS module collects various statistics from CMS data-services
+// Package CMS collects various statistics from CMS data-services
 // Copyright (c) 2017 - Valentin Kuznetsov <vkuznet@gmail.com>
 package cms
 
@@ -11,7 +11,7 @@ import (
 	"github.com/vkuznet/tierstats/utils"
 )
 
-// exported function which process user request
+// Process function process user request
 func Process(site, tiers, skims, tstamp, format, removePatterns string, dump bool) {
 	startTime := time.Now()
 	utils.TestEnv()

@@ -1,4 +1,4 @@
-// CMS module provides APIs to communicate with DBS system
+// Package CMS provides APIs to communicate with DBS system
 // Copyright (c) 2017 - Valentin Kuznetsov <vkuznet@gmail.com>
 package cms
 
@@ -29,9 +29,9 @@ func loadDBSData(furl string, data []byte) []Record {
 // DBS helper function to get blocks for given time range
 func datasets(tstamps []string) []string {
 	api := "datasets"
-	min_cdate := utils.UnixTime(tstamps[0])
-	max_cdate := utils.UnixTime(tstamps[1])
-	furl := fmt.Sprintf("%s/%s?min_cdate=%d&max_cdate=%d", dbsUrl(), api, min_cdate, max_cdate)
+	minCDate := utils.UnixTime(tstamps[0])
+	maxCDate := utils.UnixTime(tstamps[1])
+	furl := fmt.Sprintf("%s/%s?minCDate=%d&maxCDate=%d", dbsUrl(), api, minCDate, maxCDate)
 	response := utils.FetchResponse(furl, "")
 	var out []string
 	if response.Error == nil {
@@ -53,11 +53,11 @@ func datasets(tstamps []string) []string {
 func blocks(name string, tstamps []string, ch chan []string, wg *sync.WaitGroup) {
 	defer wg.Done()
 	api := "blocks"
-	min_cdate := utils.UnixTime(tstamps[0])
-	max_cdate := utils.UnixTime(tstamps[1])
-	furl := fmt.Sprintf("%s/%s?dataset=%s&min_cdate=%d&max_cdate=%d", dbsUrl(), api, name, min_cdate, max_cdate)
+	minCDate := utils.UnixTime(tstamps[0])
+	maxCDate := utils.UnixTime(tstamps[1])
+	furl := fmt.Sprintf("%s/%s?dataset=%s&minCDate=%d&maxCDate=%d", dbsUrl(), api, name, minCDate, maxCDate)
 	if !strings.HasPrefix(name, "/") {
-		furl = fmt.Sprintf("%s/%s?data_tier_name=%s&min_cdate=%d&max_cdate=%d", dbsUrl(), api, name, min_cdate, max_cdate)
+		furl = fmt.Sprintf("%s/%s?data_tier_name=%s&minCDate=%d&maxCDate=%d", dbsUrl(), api, name, minCDate, maxCDate)
 	}
 	response := utils.FetchResponse(furl, "")
 	var out []string

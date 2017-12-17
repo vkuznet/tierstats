@@ -1,4 +1,4 @@
-// CMS module provides common urls of CMS data-services
+// Package CMSmodule provides common urls of CMS data-services
 // Copyright (c) 2017 - Valentin Kuznetsov <vkuznet@gmail.com>
 package cms
 
@@ -18,5 +18,5 @@ func victordbUrl() string {
 	return "https://cmsweb.cern.ch/popdb/victorinterface"
 }
 
-// main record we work with
+// Read is main record we work with
 type Record map[string]interface{}

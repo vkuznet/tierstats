@@ -1,4 +1,4 @@
-// various utils
+// Package utils
 // Copyright (c) 2017 - Valentin Kuznetsov <vkuznet@gmail.com>
 package utils
 
@@ -18,9 +18,7 @@ import (
 	"github.com/vkuznet/x509proxy"
 )
 
-/*
- * Return array of certificates
- */
+// Certs parses user certificates
 func Certs() (tls_certs []tls.Certificate) {
 	uproxy := os.Getenv("X509_USER_PROXY")
 	uckey := os.Getenv("X509_USER_KEY")
@@ -51,9 +49,7 @@ func Certs() (tls_certs []tls.Certificate) {
 	return
 }
 
-/*
- * HTTP client for urlfetch server
- */
+// HttpClient provides http client
 func HttpClient() (client *http.Client) {
 	// create HTTP client
 	certs := Certs()
@@ -78,7 +74,7 @@ func HttpClient() (client *http.Client) {
 // create global HTTP client and re-use it through the code
 var client = HttpClient()
 
-// global URL counter for profile output
+// UrlCounter is a global URL counter for profile output
 var UrlCounter uint32
 
 // ResponseType structure is what we expect to get for our URL call.
@@ -89,7 +85,7 @@ type ResponseType struct {
 	Error error
 }
 
-// A URL fetch Worker. It has three channels: in channel for incoming requests
+// Work is a URL fetch Worker. It has three channels: in channel for incoming requests
 // (in a form of URL strings), out channel for outgoing responses in a form of
 // ResponseType structure and quit channel
 func Worker(in <-chan string, out chan<- ResponseType, quit <-chan bool) {
@@ -105,7 +101,7 @@ func Worker(in <-chan string, out chan<- ResponseType, quit <-chan bool) {
 	}
 }
 
-// Fetch data for provided URL
+// FetchResponse fetches data for provided URL
 func FetchResponse(rurl, args string) ResponseType {
 	if PROFILE {
 		atomic.AddUint32(&UrlCounter, 1)
@@ -198,7 +194,7 @@ func validate_url(rurl string) bool {
 	return false
 }
 
-// represent final response in a form of JSON structure
+// Response represents final response in a form of JSON structure
 // we use custorm representation
 func Response(rurl string, data []byte) []byte {
 	b := []byte(`{"url":`)

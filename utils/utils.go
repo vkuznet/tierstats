@@ -1,4 +1,4 @@
-// various utils
+// Package utils
 // Copyright (c) 2017 - Valentin Kuznetsov <vkuznet@gmail.com>
 package utils
 
@@ -11,11 +11,16 @@ import (
 	"time"
 )
 
-// global variable for this module which we're going to use across many modules
-var VERBOSE, CHUNKSIZE int
+// VERBOSE controls verbosity of the tool
+var VERBOSE int
+
+// CHUNKSIZE controls size of the url chunks send concurrent to data-service
+var CHUNKSIZE int
+
+// PROFILE controls profile output
 var PROFILE bool
 
-// test environment
+// TestEnv tests environment
 func TestEnv() {
 	uproxy := os.Getenv("X509_USER_PROXY")
 	ucert := os.Getenv("X509_USER_CERT")
@@ -30,51 +35,14 @@ func TestEnv() {
 	}
 }
 
-/*
-Definition of the RNACC, etc. metrics
-I think the answers can be found in the code here:
-https://github.com/dmwm/DDM/blob/master/DataPopularity/popdb.web/lib/Apps/popularity/database/popDB.py
-
-It looks like NACC is the sum of the number of accesses within a time period:
-
-sum(numAccesses) as nAcc
-
-https://github.com/dmwm/DDM/blob/fab1405ed88e5f02306e70fc23c7bbed05fd2de6/DataPopularity/popdb.web/lib/Apps/popul
-arity/database/popDB.py#L29
-
-and RNACC appears to be the percent of the number of accesses compared to the total number:
-
-100* ratio_to_report(nAcc) over() as rnAcc
-
-https://github.com/dmwm/DDM/blob/fab1405ed88e5f02306e70fc23c7bbed05fd2de6/DataPopularity/popdb.web/lib/Apps/popul
-arity/database/popDB.py#L52
-*/
-
-func TestMetric(metric string) {
-	metrics := []string{"NACC", "RNACC", "TOTCPU", "RTOTCPU", "NUSERS", "RNUSERS"}
-	if !InList(metric, metrics) {
-		msg := fmt.Sprintf("Wrong metric '%s', please choose from %v", metric, metrics)
-		fmt.Println(msg)
-		os.Exit(-1)
-	}
-}
-func TestBreakdown(bdown string) {
-	bdowns := []string{"tier", "dataset", ""}
-	if !InList(bdown, bdowns) {
-		msg := fmt.Sprintf("Wrong breakdown value '%s', please choose from %v", bdown, bdowns)
-		fmt.Println(msg)
-		os.Exit(-1)
-	}
-}
-
-// helper function to extract data tier from dataset or block name
+// DataTier helper function to extract data tier from dataset or block name
 func DataTier(name string) string {
 	dataset := strings.Split(name, "#")[0]
 	dparts := strings.Split(dataset, "/")
 	return dparts[len(dparts)-1]
 }
 
-// helper function to check item in a list
+// InList helper function to check item in a list
 func InList(a string, list []string) bool {
 	check := 0
 	for _, b := range list {
@@ -88,36 +56,7 @@ func InList(a string, list []string) bool {
 	return false
 }
 
-// helper function to substruct list2 from list1
-func Substruct(list1, list2 []string) []string {
-	var out []string
-	for _, v := range list1 {
-		if !InList(v, list2) {
-			out = append(out, v)
-		}
-	}
-	return out
-}
-
-// helper function to return keys from a map
-func MapKeys(rec map[string]interface{}) []string {
-	keys := make([]string, 0, len(rec))
-	for k := range rec {
-		keys = append(keys, k)
-	}
-	return keys
-}
-
-// helper function to return keys from a map
-func MapIntKeys(rec map[int]interface{}) []int {
-	keys := make([]int, 0, len(rec))
-	for k := range rec {
-		keys = append(keys, k)
-	}
-	return keys
-}
-
-// helper function to convert input list into set
+// List2Set helper function to convert input list into set
 func List2Set(arr []string) []string {
 	var out []string
 	for _, key := range arr {
@@ -128,7 +67,7 @@ func List2Set(arr []string) []string {
 	return out
 }
 
-// helper function to convert size into human readable form
+// SizeFormat helper function to convert size into human readable form
 func SizeFormat(val float64) string {
 	base := 1000. // CMS convert is to use power of 10
 	xlist := []string{"", "KB", "MB", "GB", "TB", "PB"}
@@ -141,7 +80,7 @@ func SizeFormat(val float64) string {
 	return fmt.Sprintf("%3.1f%s", val, xlist[len(xlist)])
 }
 
-// helper function to perform sum operation over provided array of floats
+// Sum helper function to perform sum operation over provided array of floats
 func Sum(data []float64) float64 {
 	out := 0.0
 	for _, val := range data {
@@ -150,7 +89,7 @@ func Sum(data []float64) float64 {
 	return out
 }
 
-// implement sort for []string type
+// StringList implement sort for []string type
 type StringList []string
 
 func (s StringList) Len() int           { return len(s) }
@@ -163,7 +102,7 @@ func extractVal(ts string) int {
 	return val
 }
 
-// helper function to convert given time into Unix timestamp
+// UnixTime helper function to convert given time into Unix timestamp
 func UnixTime(ts string) int64 {
 	// time is unix since epoch
 	if len(ts) == 10 { // unix time
@@ -179,7 +118,7 @@ func UnixTime(ts string) int64 {
 	return int64(t.Unix())
 }
 
-// convert given timestamp into time stamp list
+// TimeStamps convert given timestamp into time stamp list
 func TimeStamps(ts string) []string {
 	var out []string
 	const layout = "20060102"
@@ -217,7 +156,7 @@ func TimeStamps(ts string) []string {
 	return out
 }
 
-// helper function to make chunks from provided list
+// MakeChunks helper function to make chunks from provided list
 func MakeChunks(arr []string, size int) [][]string {
 	if size == 0 {
 		fmt.Println("WARNING: chunk size is not set, will use size 10")
@@ -240,21 +179,5 @@ func MakeChunks(arr []string, size int) [][]string {
 		//         out = append(out, arr[abeg:alen-1])
 		out = append(out, arr[abeg:alen])
 	}
-	return out
-}
-
-// helper function to return bin values
-func Bins(bins string) []int {
-	if bins == "" {
-		return []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
-	}
-	var out []int
-	for _, v := range strings.Split(bins, ",") {
-		val, _ := strconv.Atoi(v)
-		if val > 0 {
-			out = append(out, val)
-		}
-	}
-	sort.Ints(out)
 	return out
 }
