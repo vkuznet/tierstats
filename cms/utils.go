@@ -1,4 +1,4 @@
-// Package CMS provides common utilities used by the tool
+// Package cms provides common utilities used by the tool
 // Copyright (c) 2017 - Valentin Kuznetsov <vkuznet@gmail.com>
 package cms
 

@@ -19,7 +19,7 @@ import (
 )
 
 // Certs parses user certificates
-func Certs() (tls_certs []tls.Certificate) {
+func Certs() (tlsCerts []tls.Certificate) {
 	uproxy := os.Getenv("X509_USER_PROXY")
 	uckey := os.Getenv("X509_USER_KEY")
 	ucert := os.Getenv("X509_USER_CERT")
@@ -35,14 +35,14 @@ func Certs() (tls_certs []tls.Certificate) {
 			fmt.Println("Fail to parser proxy X509 certificate", err)
 			return
 		}
-		tls_certs = []tls.Certificate{x509cert}
+		tlsCerts = []tls.Certificate{x509cert}
 	} else if len(uckey) > 0 {
 		x509cert, err := tls.LoadX509KeyPair(ucert, uckey)
 		if err != nil {
 			fmt.Println("Fail to parser user X509 certificate", err)
 			return
 		}
-		tls_certs = []tls.Certificate{x509cert}
+		tlsCerts = []tls.Certificate{x509cert}
 	} else {
 		return
 	}
@@ -85,7 +85,7 @@ type ResponseType struct {
 	Error error
 }
 
-// Work is a URL fetch Worker. It has three channels: in channel for incoming requests
+// Worker is a URL fetch Worker. It has three channels: in channel for incoming requests
 // (in a form of URL strings), out channel for outgoing responses in a form of
 // ResponseType structure and quit channel
 func Worker(in <-chan string, out chan<- ResponseType, quit <-chan bool) {
@@ -109,7 +109,7 @@ func FetchResponse(rurl, args string) ResponseType {
 	var response ResponseType
 	response.Url = rurl
 	response.Data = []byte{}
-	if validate_url(rurl) == false {
+	if validateUrl(rurl) == false {
 		response.Error = errors.New("Invalid URL")
 		return response
 	}
@@ -180,7 +180,7 @@ func Fetch(rurl string, args string, ch chan<- ResponseType) {
 }
 
 // Helper function which validates given URL
-func validate_url(rurl string) bool {
+func validateUrl(rurl string) bool {
 	if len(rurl) > 0 {
 		pat := "(https|http)://[-A-Za-z0-9_+&@#/%?=~_|!:,.;]*[-A-Za-z0-9+&@#/%=~_|]"
 		matched, err := regexp.MatchString(pat, rurl)

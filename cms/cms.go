@@ -1,4 +1,4 @@
-// Package CMS collects various statistics from CMS data-services
+// Package cms collects various statistics from CMS data-services
 // Copyright (c) 2017 - Valentin Kuznetsov <vkuznet@gmail.com>
 package cms
 
