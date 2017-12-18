@@ -12,14 +12,6 @@ import (
 	"github.com/vkuznet/tierstats/utils"
 )
 
-func datasetNameOk(dataset string) bool {
-	pieces := strings.Split(dataset, "/")
-	if len(pieces) == 4 { // /a/b/c -> ["", a, b, c]
-		return true
-	}
-	return false
-}
-
 func formatJSON(records []Record) {
 	res, err := json.Marshal(records)
 	if err != nil {
@@ -55,31 +47,6 @@ func formatRecords(records []Record, sep string) {
 			fmt.Println(tier, pad, size, fmt.Sprintf("(%s)", utils.SizeFormat(size)), evts, "events")
 		}
 	}
-}
-
-// helper function to check item in a list
-func inList(a Record, list []Record) bool {
-	check := 0
-	for _, b := range list {
-		if b["COLLNAME"].(string) == a["COLLNAME"].(string) {
-			check += 1
-		}
-	}
-	if check != 0 {
-		return true
-	}
-	return false
-}
-
-// helper function to convert input list into set
-func list2Set(arr []Record) []Record {
-	var out []Record
-	for _, r := range arr {
-		if !inList(r, out) {
-			out = append(out, r)
-		}
-	}
-	return out
 }
 
 // remove patterns from give set of records

@@ -85,22 +85,6 @@ type ResponseType struct {
 	Error error
 }
 
-// Worker is a URL fetch Worker. It has three channels: in channel for incoming requests
-// (in a form of URL strings), out channel for outgoing responses in a form of
-// ResponseType structure and quit channel
-func Worker(in <-chan string, out chan<- ResponseType, quit <-chan bool) {
-	for {
-		select {
-		case rurl := <-in:
-			go Fetch(rurl, "", out)
-		case <-quit:
-			return
-		default:
-			time.Sleep(time.Duration(100) * time.Millisecond)
-		}
-	}
-}
-
 // FetchResponse fetches data for provided URL
 func FetchResponse(rurl, args string) ResponseType {
 	if PROFILE {
