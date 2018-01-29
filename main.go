@@ -6,6 +6,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"runtime"
+	"time"
 
 	"github.com/vkuznet/tierstats/cms"
 	"github.com/vkuznet/tierstats/utils"
@@ -32,6 +34,8 @@ func main() {
 	flag.BoolVar(&dump, "dump", false, "dump records")
 	var profile bool
 	flag.BoolVar(&profile, "profile", false, "profile code")
+	var version bool
+	flag.BoolVar(&version, "version", false, "Show version [SERVER|CLIENT]")
 	flag.Usage = func() {
 		fmt.Println(fmt.Sprintf("Usage of %s", os.Args[0]))
 		flag.PrintDefaults()
@@ -45,6 +49,10 @@ func main() {
 		fmt.Println("Real data remove filters: test,backfill,StoreResults,monitor,Error/,Scouting,MiniDaq,/Alca,L1Accept,L1EG,L1Jet,L1Mu,PhysicsDST,VdM,/Hcal,express,Interfill,Bunnies")
 	}
 	flag.Parse()
+	if version {
+		fmt.Println(info())
+		os.Exit(0)
+	}
 	utils.VERBOSE = verbose
 	utils.PROFILE = profile
 	utils.CHUNKSIZE = chunkSize
@@ -69,4 +77,11 @@ func main() {
 		}
 		cms.Process(site, tiers, skims, trange, format, remove, dump)
 	}
+}
+
+// helper function to return current version
+func info() string {
+	goVersion := runtime.Version()
+	tstamp := time.Now()
+	return fmt.Sprintf("Build: git={{VERSION}} go=%s date=%s", goVersion, tstamp)
 }
