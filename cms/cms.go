@@ -80,6 +80,9 @@ func process(tierNames, skimNames, tstamps []string, patterns string) ([]Record,
 		}
 		// loop over skims
 		for _, s := range skimNames {
+			if s == "" {
+				continue
+			}
 			rec, ok := r[s]
 			if ok {
 				r := rec.(Record)
