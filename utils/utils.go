@@ -131,6 +131,13 @@ func TimeStamps(ts string) []string {
 		val := extractVal(ts)
 		sec := now - int64(val*24*60*60)
 		bdate = time.Unix(sec, 0).Format(layout)
+	} else if strings.HasSuffix(ts, "w") == true { // N-weeks
+		val := extractVal(ts)
+		sec := now - int64(val*7*24*60*60)
+		if VERBOSE > 0 {
+			fmt.Println("time interval", ts, val, now, sec)
+		}
+		bdate = time.Unix(sec, 0).Format(layout)
 	} else if strings.HasSuffix(ts, "m") == true { // N-months
 		val := extractVal(ts)
 		sec := now - int64(val*30*24*60*60)
