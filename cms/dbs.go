@@ -31,7 +31,7 @@ func datasets(tstamps []string) []string {
 	api := "datasets"
 	minCDate := utils.UnixTime(tstamps[0])
 	maxCDate := utils.UnixTime(tstamps[1])
-	furl := fmt.Sprintf("%s/%s?minCDate=%d&maxCDate=%d", dbsUrl(), api, minCDate, maxCDate)
+	furl := fmt.Sprintf("%s/%s?min_cdate=%d&max_cdate=%d", dbsUrl(), api, minCDate, maxCDate)
 	response := utils.FetchResponse(furl, "")
 	var out []string
 	if response.Error == nil {
@@ -55,9 +55,9 @@ func blocks(name string, tstamps []string, ch chan []string, wg *sync.WaitGroup)
 	api := "blocks"
 	minCDate := utils.UnixTime(tstamps[0])
 	maxCDate := utils.UnixTime(tstamps[1])
-	furl := fmt.Sprintf("%s/%s?dataset=%s&minCDate=%d&maxCDate=%d", dbsUrl(), api, name, minCDate, maxCDate)
+	furl := fmt.Sprintf("%s/%s?dataset=%s&min_cdate=%d&max_cdate=%d", dbsUrl(), api, name, minCDate, maxCDate)
 	if !strings.HasPrefix(name, "/") {
-		furl = fmt.Sprintf("%s/%s?data_tier_name=%s&minCDate=%d&maxCDate=%d", dbsUrl(), api, name, minCDate, maxCDate)
+		furl = fmt.Sprintf("%s/%s?data_tier_name=%s&min_cdate=%d&max_cdate=%d", dbsUrl(), api, name, minCDate, maxCDate)
 	}
 	response := utils.FetchResponse(furl, "")
 	var out []string
