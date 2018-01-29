@@ -19,7 +19,7 @@ func main() {
 	var skims string
 	flag.StringVar(&skims, "skims", "", "comma separated list of skims, e.g. PromptReco,PromptSkim")
 	var trange string
-	flag.StringVar(&trange, "trange", "1d", "Specify time interval in YYYYMMDD format, e.g 20150101-20150201 or use short notations 1d, 1m, 1y for one day, month, year, respectively")
+	flag.StringVar(&trange, "trange", "1d", "Specify time interval in YYYYMMDD format, e.g 20150101-20150201 or use short notations 1d, 1w, 1m, 1y for one day, month, year, respectively")
 	var format string
 	flag.StringVar(&format, "format", "txt", "Output format type, txt or json")
 	var remove string
